@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF7D649C201F6B8500DF74A0 /* Response.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7D649A201F6B8500DF74A0 /* Response.cpp */; };
+		CF7D649F201F6D5C00DF74A0 /* Header.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7D649D201F6D5C00DF74A0 /* Header.cpp */; };
+		CF7D64A22020BAD500DF74A0 /* NetContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7D64A02020BAD500DF74A0 /* NetContext.cpp */; };
 		CFCAA13B2018CD2600582356 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAA13A2018CD2600582356 /* main.cpp */; };
+		CFCAA143201A2F3300582356 /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAA141201A2F3300582356 /* Request.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +27,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CF7D649A201F6B8500DF74A0 /* Response.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Response.cpp; sourceTree = "<group>"; };
+		CF7D649B201F6B8500DF74A0 /* Response.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Response.hpp; sourceTree = "<group>"; };
+		CF7D649D201F6D5C00DF74A0 /* Header.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Header.cpp; sourceTree = "<group>"; };
+		CF7D649E201F6D5C00DF74A0 /* Header.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Header.hpp; sourceTree = "<group>"; };
+		CF7D64A02020BAD500DF74A0 /* NetContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetContext.cpp; sourceTree = "<group>"; };
+		CF7D64A12020BAD500DF74A0 /* NetContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NetContext.hpp; sourceTree = "<group>"; };
 		CFCAA1372018CD2600582356 /* ToooooomServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ToooooomServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFCAA13A2018CD2600582356 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		CFCAA141201A2F3300582356 /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
+		CFCAA142201A2F3300582356 /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +70,14 @@
 			isa = PBXGroup;
 			children = (
 				CFCAA13A2018CD2600582356 /* main.cpp */,
+				CFCAA141201A2F3300582356 /* Request.cpp */,
+				CFCAA142201A2F3300582356 /* Request.hpp */,
+				CF7D649A201F6B8500DF74A0 /* Response.cpp */,
+				CF7D649B201F6B8500DF74A0 /* Response.hpp */,
+				CF7D649D201F6D5C00DF74A0 /* Header.cpp */,
+				CF7D649E201F6D5C00DF74A0 /* Header.hpp */,
+				CF7D64A02020BAD500DF74A0 /* NetContext.cpp */,
+				CF7D64A12020BAD500DF74A0 /* NetContext.hpp */,
 			);
 			path = ToooooomServer;
 			sourceTree = "<group>";
@@ -119,7 +139,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF7D649F201F6D5C00DF74A0 /* Header.cpp in Sources */,
 				CFCAA13B2018CD2600582356 /* main.cpp in Sources */,
+				CFCAA143201A2F3300582356 /* Request.cpp in Sources */,
+				CF7D64A22020BAD500DF74A0 /* NetContext.cpp in Sources */,
+				CF7D649C201F6B8500DF74A0 /* Response.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
