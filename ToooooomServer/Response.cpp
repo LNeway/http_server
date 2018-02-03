@@ -7,6 +7,10 @@
 //
 
 #include "Response.hpp"
+#include <unistd.h>
+#ifndef NEW_LINE
+#define NEW_LINE "\r\n"
+#endif
 
 char* Response::getBody() {
     return this->body;
@@ -16,13 +20,22 @@ int Response::getResponseCode() {
     return this->responseCode;
 }
 
-std::vector<Header> Response::getHeaders() {
-    std::vector<Header> hs;
-    std::map<std::string, std::string>::iterator begin = this->headers.begin();
-    std::map<std::string, std::string>::iterator end = this->headers.end();
+std::vector<Head> Response::getHeaders() {
+    std::vector<Head> hs;
+    std::map<std::string, std::string>::iterator begin = this->heads.begin();
+    std::map<std::string, std::string>::iterator end = this->heads.end();
     while (begin != end) {
-        Header head(begin->first, begin->second);
+        Head head(begin->first, begin->second);
         hs.push_back(head);
     }
     return hs;
+}
+
+void Response::writeSocket(int socket) {
+    //std::string contentLength = heads[CONTENT_LENGTH];
+    //int length = stoi(contentLength);
+    std::string content = "HTTP/1.1 ";
+    content += std::to_string(responseCode);
+    content += NEW_LINE;
+    write(socket, content.c_str(), content.length());
 }

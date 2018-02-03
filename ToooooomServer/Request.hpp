@@ -11,14 +11,19 @@
 
 #include <stdio.h>
 #include <string>
-
+#include <vector>
+#include "Head.hpp"
+#include "Method.hpp"
 class Request {
 private:
-    int socket;
-
-
+    std::vector<Head> headers;
+    Method method;
+    
 public:
-   
+    std::vector<Head> getHeads();
+    
+    Method getMethod();
+    
 };
 #endif /* Request_hpp */
 

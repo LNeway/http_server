@@ -10,13 +10,13 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-Request::Request(int socket) {
-    this->socket = socket;
+
+std::vector<Head> Request::getHeads() {
+    return this->headers;
 }
 
-int Request::getSocket() {
-    return this->socket;
+Method Request::getMethod() {
+    return this->method;
 }
-
 
 

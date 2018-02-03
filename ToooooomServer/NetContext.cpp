@@ -7,12 +7,20 @@
 //
 
 #include "NetContext.hpp"
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
+NetContext::NetContext(int socket):socket(socket) {
+    
+}
 
 int NetContext::getSocket() {
     return this->socket;
 }
 
-std::string Request::getClientAddress() {
+std::string NetContext::getClientAddress() {
     struct sockaddr_in sa;
     unsigned int len = sizeof(sa);
     if (!getpeername(this->socket, (struct sockaddr *)&sa, &len)) {

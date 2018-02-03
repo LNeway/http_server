@@ -11,18 +11,19 @@
 
 #include <stdio.h>
 #include <vector>
-#include "Header.hpp"
+#include "Head.hpp"
 #include <map>
 
 class Response {
 private:
     int responseCode;
-    std::map<std::string, std::string> headers;
+    std::map<std::string, std::string> heads;
     char* body;
 public:
     int getResponseCode();
     char* getBody();
-    std::vector<Header> getHeaders();
+    std::vector<Head> getHeaders();
+    void writeSocket(int socket);
 };
 
 #endif /* Response_hpp */

@@ -12,14 +12,16 @@
 #include <stdio.h>
 #include <string>
 
-class Header {
+const std::string CONTENT_LENGTH = "content-length";
+
+class Head {
     
 private:
     std::string name;
     std::string value;
     
 public:
-    Header(std::string name, std::string value):name(name), value(value) {
+    Head(std::string name, std::string value):name(name), value(value) {
         
     };
     std::string getName();

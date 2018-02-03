@@ -12,20 +12,18 @@
 
 #include <stdio.h>
 #include <string>
+
 class NetContext {
     
 private:
     int socket;
 
-public
-    NetContext(int socket):socket(socket) {
-        
-    }
+public:
+    NetContext(int socket);
     
     int getSocket();
     
     std::string getClientAddress();
-}
-
+};
 
 #endif /* NetContext_hpp */

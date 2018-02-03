@@ -15,23 +15,41 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include "Request.hpp"
+#include "Response.hpp"
 #include "NetContext.hpp"
+#include "Utils.cpp"
 
 #define BUFFER_LENGTH 1024
+#define REQUEST_END "\r\n\r\n"
 
 using namespace std;
 
-void* handleRequest(void* netContext) {
+Response handleRequest(Request& request) {
+    Response resp;
+    return resp;
+}
+
+void* handleSocket(void* netContext) {
     char buffer[BUFFER_LENGTH];
     NetContext* net = (NetContext*) netContext;
-    if (request != NULL) {
-        cout<<"this request's address is "<<net->getClientAddress()<<endl;
-        while (read(request->getSocket(), buffer, BUFFER_LENGTH) != 0) {
-            cout<<buffer<<endl;
+    std::string requestString;
+    if (net != NULL) {
+        long currentLength;
+        Request req;
+        while ((currentLength = read(net->getSocket(), buffer, BUFFER_LENGTH)) != 0) {
+            requestString += buffer;
+            if (ends_with(requestString, REQUEST_END)) {
+                req = buildRequest(requestString);
+                cout<<"detect request..."<<endl;
+                break;
+            }
         }
-        close(request->getSocket());
-        delete request;
-    
+        
+        Response resp = handleRequest(req);
+        resp.writeSocket(net->getSocket());
+        cout<<requestString<<endl;
+        close(net->getSocket());
+        delete net;
     }
     return NULL;
 }
@@ -52,21 +70,20 @@ int main(int argc, const char * argv[]) {
     //进入监听状态，等待用户发起请求
     while (true) {
         listen(serv_sock, 20);
-        //接收客户端请求
+        // 接收客户端请求
         struct sockaddr_in clnt_addr;
         socklen_t clnt_addr_size = sizeof(clnt_addr);
         cout<<"listen to client connection"<<endl;
         int clientSocket = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
-        cout<<"receive use "<<endl;
-         //向客户端发送数据
+        // cout<<"receive use  \r\n"<<endl;
+        // 向客户端发送数据
         pthread_t tid;
         NetContext* netContext = new NetContext(clientSocket);
-        int ret = pthread_create(&tid, NULL, handleRequest, (void*)netContext);
+        int ret = pthread_create(&tid, NULL, handleSocket, (void*)netContext);
         if (ret != 0) {
             cout<<"create a thread failed...."<<endl;
         }
     }
-   
    
     close(serv_sock);
     return 0;

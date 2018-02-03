@@ -6,13 +6,13 @@
 //  Copyright © 2018年 devtom. All rights reserved.
 //
 
-#include "Header.hpp"
+#include "Head.hpp"
 
-std::string Header::getName() {
+std::string Head::getName() {
     return this->name;
 }
 
-std::string Header::getValue() {
+std::string Head::getValue() {
     return this->value;
 }
 
