@@ -11,7 +11,6 @@
 		CF7D649F201F6D5C00DF74A0 /* Head.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7D649D201F6D5C00DF74A0 /* Head.cpp */; };
 		CF7D64A22020BAD500DF74A0 /* NetContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7D64A02020BAD500DF74A0 /* NetContext.cpp */; };
 		CFC4087A20258B070054544D /* Method.hpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC4087920258B070054544D /* Method.hpp */; };
-		CFC4087D2025977A0054544D /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC4087C2025977A0054544D /* Utils.cpp */; };
 		CFCAA13B2018CD2600582356 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAA13A2018CD2600582356 /* main.cpp */; };
 		CFCAA143201A2F3300582356 /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCAA141201A2F3300582356 /* Request.cpp */; };
 /* End PBXBuildFile section */
@@ -36,7 +35,9 @@
 		CF7D64A02020BAD500DF74A0 /* NetContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetContext.cpp; sourceTree = "<group>"; };
 		CF7D64A12020BAD500DF74A0 /* NetContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NetContext.hpp; sourceTree = "<group>"; };
 		CFC4087920258B070054544D /* Method.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Method.hpp; sourceTree = "<group>"; };
-		CFC4087C2025977A0054544D /* Utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
+		CFC4087E2025AD2E0054544D /* Const.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Const.hpp; sourceTree = "<group>"; };
+		CFC4087F2025B8860054544D /* Utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Utils.hpp; sourceTree = "<group>"; };
+		CFC408812025BB8B0054544D /* Log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Log.hpp; sourceTree = "<group>"; };
 		CFCAA1372018CD2600582356 /* ToooooomServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ToooooomServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFCAA13A2018CD2600582356 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CFCAA141201A2F3300582356 /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
@@ -83,7 +84,9 @@
 				CF7D64A02020BAD500DF74A0 /* NetContext.cpp */,
 				CF7D64A12020BAD500DF74A0 /* NetContext.hpp */,
 				CFC4087920258B070054544D /* Method.hpp */,
-				CFC4087C2025977A0054544D /* Utils.cpp */,
+				CFC4087E2025AD2E0054544D /* Const.hpp */,
+				CFC4087F2025B8860054544D /* Utils.hpp */,
+				CFC408812025BB8B0054544D /* Log.hpp */,
 			);
 			path = ToooooomServer;
 			sourceTree = "<group>";
@@ -147,7 +150,6 @@
 			files = (
 				CF7D649F201F6D5C00DF74A0 /* Head.cpp in Sources */,
 				CFCAA13B2018CD2600582356 /* main.cpp in Sources */,
-				CFC4087D2025977A0054544D /* Utils.cpp in Sources */,
 				CFC4087A20258B070054544D /* Method.hpp in Sources */,
 				CFCAA143201A2F3300582356 /* Request.cpp in Sources */,
 				CF7D64A22020BAD500DF74A0 /* NetContext.cpp in Sources */,

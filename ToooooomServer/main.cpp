@@ -17,7 +17,7 @@
 #include "Request.hpp"
 #include "Response.hpp"
 #include "NetContext.hpp"
-#include "Utils.cpp"
+#include "Utils.hpp"
 
 #define BUFFER_LENGTH 1024
 #define REQUEST_END "\r\n\r\n"
@@ -25,6 +25,14 @@
 using namespace std;
 
 Response handleRequest(Request& request) {
+    switch (request.getMethod()) {
+        case GET:
+            Log::d("handleRequest", "this is a get request....");
+            break;
+        default:
+            break;
+    }
+
     Response resp;
     return resp;
 }
@@ -47,7 +55,7 @@ void* handleSocket(void* netContext) {
         
         Response resp = handleRequest(req);
         resp.writeSocket(net->getSocket());
-        cout<<requestString<<endl;
+        //cout<<requestString<<endl;
         close(net->getSocket());
         delete net;
     }

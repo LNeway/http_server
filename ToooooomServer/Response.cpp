@@ -8,9 +8,7 @@
 
 #include "Response.hpp"
 #include <unistd.h>
-#ifndef NEW_LINE
-#define NEW_LINE "\r\n"
-#endif
+#include "Const.hpp"
 
 char* Response::getBody() {
     return this->body;
@@ -39,3 +37,4 @@ void Response::writeSocket(int socket) {
     content += NEW_LINE;
     write(socket, content.c_str(), content.length());
 }
+

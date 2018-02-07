@@ -19,6 +19,14 @@ private:
     int responseCode;
     std::map<std::string, std::string> heads;
     char* body;
+    
+    /**
+     create response content
+
+     @param length the ptr where store the length.
+     @return the repsonse content.
+     */
+    char* buildResponse(int* length);
 public:
     int getResponseCode();
     char* getBody();

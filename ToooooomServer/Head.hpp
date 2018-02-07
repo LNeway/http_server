@@ -6,8 +6,8 @@
 //  Copyright © 2018年 devtom. All rights reserved.
 //
 
-#ifndef Header_hpp
-#define Header_hpp
+#ifndef Head_hpp
+#define Head_hpp
 
 #include <stdio.h>
 #include <string>
