@@ -77,7 +77,7 @@ int main(int argc, const char * argv[]) {
     }
     //进入监听状态，等待用户发起请求
     while (true) {
-        listen(serv_sock, 20);
+        listen(serv_sock, 1024);
         // 接收客户端请求
         struct sockaddr_in clnt_addr;
         socklen_t clnt_addr_size = sizeof(clnt_addr);
@@ -87,10 +87,11 @@ int main(int argc, const char * argv[]) {
         // 向客户端发送数据
         pthread_t tid;
         NetContext* netContext = new NetContext(clientSocket);
-        int ret = pthread_create(&tid, NULL, handleSocket, (void*)netContext);
-        if (ret != 0) {
-            cout<<"create a thread failed...."<<endl;
-        }
+        handleSocket(netContext);
+//        int ret = pthread_create(&tid, NULL, handleSocket, (void*)netContext);
+//        if (ret != 0) {
+//            cout<<"create a thread failed...."<<endl;
+//        }
     }
    
     close(serv_sock);

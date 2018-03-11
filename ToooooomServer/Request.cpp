@@ -28,6 +28,6 @@ void Request::setMethod(Method method) {
 }
 
 void Request::setHeads(std::vector<Head> heads) {
-    this->headers = headers;
+    this->headers = heads;
 }
 
