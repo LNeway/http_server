@@ -38,6 +38,24 @@ static std::vector<std::string> splitString(std::string value, std::string const
     return vector;
 }
 
+
+/**
+ 返回去掉空格之后的字符串
+
+ @param str <#str description#>
+ @return <#return value description#>
+ */
+static std::string trim(const std::string str)
+{
+    std::size_t first = str.find_first_not_of(' ');
+    if (std::string::npos == first)
+    {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
+
 static Request buildRequest(std::string const &value) {
     std::vector<std::string> lines = splitString(value, NEW_LINE);
     std::vector<std::string>::iterator begin = lines.begin();
@@ -45,6 +63,7 @@ static Request buildRequest(std::string const &value) {
     Request::Build build;
     std::vector<Head> headsVector;
     bool isMethodLine = true;
+    int emptyCount =  0;
     while (begin != end) {
         if (isMethodLine) {
             std::vector<std::string> methodV = splitString(*begin, " ");
@@ -56,10 +75,16 @@ static Request buildRequest(std::string const &value) {
                 build.setRequestMethod(it->second);
             }
             isMethodLine = false;
-        } else {
-            std::vector<std::string> heads = splitString(*begin, ": ");
+        } else if (emptyCount != 1) { // deal with the request heads;
+            if (trim(*begin).length() == 0) {
+                ++emptyCount;
+                continue;
+            }
+            std::vector<std::string> heads = splitString(*begin, ":");
             Head head(heads[0],heads[1]);
             headsVector.push_back(head);
+        } else { // deal with request body.
+            Log::d("reqeustBody", "this is request body");
         }
         ++begin;
     }

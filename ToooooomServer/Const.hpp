@@ -18,5 +18,4 @@
 
 #define NEW_LINE "\r\n"
 
-
 #endif /* Const_h */
