@@ -18,6 +18,7 @@
 #include "Response.hpp"
 #include "NetContext.hpp"
 #include "Utils.hpp"
+#include <vector>
 
 #define BUFFER_LENGTH 1024
 #define REQUEST_END "\r\n\r\n"
@@ -37,6 +38,30 @@ Response handleRequest(Request& request) {
     return resp;
 }
 
+int readLine(int fd, char* src, unsigned int maxLength) {
+    unsigned int index = 0;
+    char c;
+    while (index < maxLength) {
+        read(fd, &c, 1);
+        
+        if (c == '\0') {
+            break;
+        }
+        
+        if (c == '\r') {
+            read(fd, &c, 1);
+            if (c == '\n') {
+                break;
+            } else {
+                src[index++] = c;
+            }
+        } else {
+            src[index++] = c;
+        }
+    }
+    return index;
+}
+
 void* handleSocket(void* netContext) {
     char buffer[BUFFER_LENGTH];
     NetContext* net = (NetContext*) netContext;
@@ -44,17 +69,21 @@ void* handleSocket(void* netContext) {
     if (net != NULL) {
         long currentLength;
         Request req;
-        while ((currentLength = read(net->getSocket(), buffer, BUFFER_LENGTH)) != 0) {
-            requestString += buffer;
-            if (ends_with(requestString, REQUEST_END)) {
-                req = buildRequest(requestString);
-                cout<<"detect request..."<<endl;
-                break;
-            }
-        }
+        std::vector<string> heads;
         
+        int count = 0;
+        while ((count = readLine(net->getSocket(), buffer, BUFFER_LENGTH)) != 0) {
+            string head(buffer,count);
+            std::cout<<head<<endl;
+            heads.push_back(head);
+        }
+    
+        req = buildRequest(heads);
+    
+    
+        Log::d("request", "request is done");
         Response resp = handleRequest(req);
-        resp.writeSocket(net->getSocket());
+        resp.writeSocket(net->getSocket(), "Hello world");
         //cout<<requestString<<endl;
         close(net->getSocket());
         delete net;

@@ -29,12 +29,19 @@ std::vector<Head> Response::getHeaders() {
     return hs;
 }
 
-void Response::writeSocket(int socket) {
+void Response::writeSocket(int socket, std::string content) {
     //std::string contentLength = heads[CONTENT_LENGTH];
     //int length = stoi(contentLength);
-    std::string content = "HTTP/1.1 ";
-    content += std::to_string(responseCode);
-    content += NEW_LINE;
-    write(socket, content.c_str(), content.length());
+    std::string bd = "HTTP/1.1 ";
+    bd += std::to_string(200);
+    bd += NEW_LINE;
+    bd += "Content-Type: text/html;charset=ISO-8859-1";
+    bd += NEW_LINE;
+    bd += "Content-Length:";
+    bd += content.length();
+    bd += NEW_LINE;
+    bd += NEW_LINE;
+    bd += content;
+    write(socket, bd.c_str(), bd.length());
 }
 

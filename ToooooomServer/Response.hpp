@@ -31,7 +31,7 @@ public:
     int getResponseCode();
     char* getBody();
     std::vector<Head> getHeaders();
-    void writeSocket(int socket);
+    void writeSocket(int socket, std::string content);
 };
 
 #endif /* Response_hpp */

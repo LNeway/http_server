@@ -35,6 +35,11 @@ static std::vector<std::string> splitString(std::string value, std::string const
         vector.push_back(value.substr(0, pos));
         value.erase(0, pos + delLength);
     }
+    
+    if (value.length()) {
+        vector.push_back(value);
+    }
+    
     return vector;
 }
 
@@ -56,10 +61,9 @@ static std::string trim(const std::string str)
     return str.substr(first, (last - first + 1));
 }
 
-static Request buildRequest(std::string const &value) {
-    std::vector<std::string> lines = splitString(value, NEW_LINE);
-    std::vector<std::string>::iterator begin = lines.begin();
-    std::vector<std::string>::iterator end = lines.end();
+static Request buildRequest(std::vector<std::string> heads) {
+    std::vector<std::string>::iterator begin = heads.begin();
+    std::vector<std::string>::iterator end = heads.end();
     Request::Build build;
     std::vector<Head> headsVector;
     bool isMethodLine = true;
@@ -80,7 +84,7 @@ static Request buildRequest(std::string const &value) {
                 ++emptyCount;
                 continue;
             }
-            std::vector<std::string> heads = splitString(*begin, ":");
+            std::vector<std::string> heads = splitString(*begin, ": ");
             Head head(heads[0],heads[1]);
             headsVector.push_back(head);
         } else { // deal with request body.
