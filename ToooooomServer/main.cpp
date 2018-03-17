@@ -69,7 +69,7 @@ void* handleSocket(void* netContext) {
     if (net != NULL) {
         long currentLength;
         Request req;
-        std::vector<string> heads;
+        vector<string> heads;
         
         int count = 0;
         while ((count = readLine(net->getSocket(), buffer, BUFFER_LENGTH)) != 0) {
@@ -77,10 +77,27 @@ void* handleSocket(void* netContext) {
             std::cout<<head<<endl;
             heads.push_back(head);
         }
+        
+        vector<string>::iterator itr = heads.begin();
+        vector<string>::iterator end = heads.end();
+        unsigned int bodyLength = 0;
+        while (itr != end) {
+            string head = (*itr);
+            vector<string> pair = splitString(head, ": ");
+            if (strcasecmp(pair[0].c_str(), "Content-Length") == 0) {
+                bodyLength = stoi(pair[1]);
+                break;
+            }
+            ++itr;
+        }
     
-        req = buildRequest(heads);
-    
-    
+        char* body = NULL;
+        if (bodyLength) {
+            body = (char*) malloc(bodyLength);
+            read(net->getSocket(), body, bodyLength);
+        }
+        
+        req = buildRequest(heads, body, bodyLength);
         Log::d("request", "request is done");
         Response resp = handleRequest(req);
         resp.writeSocket(net->getSocket(), "Hello world");

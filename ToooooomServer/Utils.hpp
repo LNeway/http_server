@@ -61,7 +61,7 @@ static std::string trim(const std::string str)
     return str.substr(first, (last - first + 1));
 }
 
-static Request buildRequest(std::vector<std::string> heads) {
+static Request buildRequest(std::vector<std::string> heads, char* body, unsigned int bodyLength) {
     std::vector<std::string>::iterator begin = heads.begin();
     std::vector<std::string>::iterator end = heads.end();
     Request::Build build;
@@ -93,6 +93,9 @@ static Request buildRequest(std::vector<std::string> heads) {
         ++begin;
     }
     build.setRequestHeads(headsVector);
+    if (bodyLength) {
+        build.setBody(body, bodyLength);
+    }
     return build.build();
 }
 

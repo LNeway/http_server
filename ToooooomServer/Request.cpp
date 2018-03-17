@@ -31,3 +31,8 @@ void Request::setHeads(std::vector<Head> heads) {
     this->headers = heads;
 }
 
+void Request::setBody(char* body, int length) {
+    this->body = body;
+    this->bodyLength = length;
+}
+
