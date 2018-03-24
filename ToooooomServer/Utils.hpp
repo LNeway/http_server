@@ -65,17 +65,21 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
     std::vector<std::string>::iterator begin = heads.begin();
     std::vector<std::string>::iterator end = heads.end();
     Request::Build build;
-    std::vector<Head> headsVector;
+    std::map<std::string, std::string> headsMap;
     bool isMethodLine = true;
     int emptyCount =  0;
+    Method method;
+    std::string path;
     while (begin != end) {
         if (isMethodLine) {
             std::vector<std::string> methodV = splitString(*begin, " ");
             std::string methodStr = methodV[0];
+            path = methodV[1];
             std::map<std::string, Method>::iterator it = allMethod.find(methodStr);
             if (it == allMethod.end()) {
                 Log::d("method", "unspported method");
             } else {
+                method = it->second;
                 build.setRequestMethod(it->second);
             }
             isMethodLine = false;
@@ -85,14 +89,43 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
                 continue;
             }
             std::vector<std::string> heads = splitString(*begin, ": ");
-            Head head(heads[0],heads[1]);
-            headsVector.push_back(head);
+            headsMap.insert(std::pair<std::string, std::string>(heads[0], heads[1]));
         } else { // deal with request body.
             Log::d("reqeustBody", "this is request body");
         }
         ++begin;
     }
-    build.setRequestHeads(headsVector);
+    
+    std::vector<std::string> pathV = splitString(path, "?");
+    if (pathV.size() == 1) {
+        build.setPath(pathV[0]);
+    }
+    
+    std::map<std::string, std::string> params;
+    
+    if (pathV.size() == 2) {
+        std::string queryString = pathV[1];
+        std::vector<std::string> pairs = splitString(queryString, "&");
+        std::vector<std::string>::iterator begin = pairs.begin();
+        std::vector<std::string>::iterator end = pairs.end();
+        while(begin != end) {
+            std::vector<std::string> pairs = splitString(*begin, "=");
+            if (pairs.size() == 2) {
+                params.insert(std::pair<std::string, std::string>(pairs[0], pairs[1]));
+            }
+            ++begin;
+        }
+    }
+    
+    if (method == POST) {
+        std::map<std::string, std::string>::iterator contentTypeIt = headsMap.find(CONTENT_TYPE);
+        if (contentTypeIt != headsMap.end()) {
+            std::string contentType = contentTypeIt->second;
+            
+        }
+    }
+    build.setRequesetParams(params);
+    build.setRequestHeads(headsMap);
     if (bodyLength) {
         build.setBody(body, bodyLength);
     }

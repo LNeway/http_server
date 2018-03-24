@@ -17,5 +17,6 @@
 #define Const_h
 
 #define NEW_LINE "\r\n"
+#define CONTENT_TYPE "content-type"
 
 #endif /* Const_h */

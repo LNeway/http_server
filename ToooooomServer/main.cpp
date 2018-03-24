@@ -77,10 +77,11 @@ void* handleSocket(void* netContext) {
             std::cout<<head<<endl;
             heads.push_back(head);
         }
-        
+
         vector<string>::iterator itr = heads.begin();
         vector<string>::iterator end = heads.end();
         unsigned int bodyLength = 0;
+        string content_type;
         while (itr != end) {
             string head = (*itr);
             vector<string> pair = splitString(head, ": ");
