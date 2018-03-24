@@ -140,31 +140,43 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
             if (types.size() == 2) {
                 std::vector<std::string> boundary = splitString(types[1], "=");
                 if (boundary.size() == 2) { // find the body data boundary
-                    std::string boundaryStr = boundary[1];
+                    std::string boundaryStr = "--"+boundary[1];
                     if (bodyLength > boundaryStr.length()) {
-                        std::string pattern = boundaryStr + "[\\s\\S]*"; //
+                        std::string pattern = boundaryStr + "[\\s\\S]*?" + boundaryStr; //
                         std::regex re(pattern);
                     
                         std::string bodyStr(body);
                         std::smatch results;
                         std::vector<std::string> dataPart;
                         while (std::regex_search(bodyStr, results, re)) {
+                            std::string s;
                             for (std::string x : results) {
-                                x.erase(0, boundaryStr.length());
-                                dataPart.push_back(x);
+                                s += x;
                             }
-                            bodyStr = results.suffix().str();
+                            s.erase(0, boundaryStr.length());
+                            s.erase(s.length() - boundaryStr.length(), s.length());
+                            dataPart.push_back(s);
+                            bodyStr = boundaryStr + results.suffix().str();
                         }
                         
                         for (std::string data : dataPart) {
                             std::vector<std::string> lines = splitString(data, "\r\n");
-                            if (lines.size() != 3) {
+                            if (lines.size() != 4) {
                                 continue;
                             }
                             
+                            std::string kp = "name=[\\s\\S]*";
+                            std::regex kr(kp);
+                            std::smatch km;
+
                             
-                            
-                            
+                            if (std::regex_search(lines[1], km, kr)) {
+                                std::string keyValue = *km.begin();
+                                std::vector<std::string> kv = splitString(keyValue, "=");
+                                if (kv.size() == 2) {
+                                    params.insert(std::pair<std::string, std::string>(kv[1], lines[3]));
+                                }
+                            }
                         }
                     }
                 }

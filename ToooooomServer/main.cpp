@@ -99,6 +99,11 @@ void* handleSocket(void* netContext) {
         }
         
         req = buildRequest(heads, body, bodyLength);
+        
+        for (auto value : req.getParams()) {
+            cout<<value.first <<" "<<value.second<<endl;
+        }
+        
         Log::d("request", "request is done");
         Response resp = handleRequest(req);
         resp.writeSocket(net->getSocket(), "Hello world");
