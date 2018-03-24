@@ -7,6 +7,7 @@
 //
 
 #include "Const.hpp"
+#include <regex>
 
 #ifndef Utils_h
 #define Utils_h
@@ -61,6 +62,15 @@ static std::string trim(const std::string str)
     return str.substr(first, (last - first + 1));
 }
 
+
+/**
+ build request from the params.
+
+ @param heads <#heads description#>
+ @param body <#body description#>
+ @param bodyLength <#bodyLength description#>
+ @return <#return value description#>
+ */
 static Request buildRequest(std::vector<std::string> heads, char* body, unsigned int bodyLength) {
     std::vector<std::string>::iterator begin = heads.begin();
     std::vector<std::string>::iterator end = heads.end();
@@ -121,7 +131,44 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
         std::map<std::string, std::string>::iterator contentTypeIt = headsMap.find(CONTENT_TYPE);
         if (contentTypeIt != headsMap.end()) {
             std::string contentType = contentTypeIt->second;
+            std::vector<std::string> types = splitString(contentType, "; ");
+            if (types.size() == 1) {
+                build.setConentType(types[0]);
+            }
             
+            // parse the body boundary,get request data in the body.
+            if (types.size() == 2) {
+                std::vector<std::string> boundary = splitString(types[1], "=");
+                if (boundary.size() == 2) { // find the body data boundary
+                    std::string boundaryStr = boundary[1];
+                    if (bodyLength > boundaryStr.length()) {
+                        std::string pattern = boundaryStr + "[\\s\\S]*"; //
+                        std::regex re(pattern);
+                    
+                        std::string bodyStr(body);
+                        std::smatch results;
+                        std::vector<std::string> dataPart;
+                        while (std::regex_search(bodyStr, results, re)) {
+                            for (std::string x : results) {
+                                x.erase(0, boundaryStr.length());
+                                dataPart.push_back(x);
+                            }
+                            bodyStr = results.suffix().str();
+                        }
+                        
+                        for (std::string data : dataPart) {
+                            std::vector<std::string> lines = splitString(data, "\r\n");
+                            if (lines.size() != 3) {
+                                continue;
+                            }
+                            
+                            
+                            
+                            
+                        }
+                    }
+                }
+            }
         }
     }
     build.setRequesetParams(params);

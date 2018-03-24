@@ -24,6 +24,7 @@ private:
     char* body;
     int bodyLength;
     std::string path;
+    std::string contentType;
     
     
     void setHeads(std::map<std::string, std::string> heads);
@@ -31,6 +32,7 @@ private:
     void setMethod(Method method);
     void setBody(char* body, int bodyLength);
     void setPath(std::string path);
+    void setContentType(std::string conentType);
     
 public:
     Request();
@@ -40,6 +42,8 @@ public:
     std::string getPath();
     
     std::map<std::string, std::string> getParams();
+    
+    std::string getContentType();
 
     
     Method getMethod();
@@ -52,6 +56,7 @@ public:
         int bodyLength;
         std::map<std::string, std::string> params;
         std::string path;
+        std::string conentType;
         
         public:
             void setRequestMethod(Method method) {
@@ -75,6 +80,10 @@ public:
                 this->path = path;
             }
         
+            void setConentType(std::string contentType) {
+                this->conentType = contentType;
+            }
+        
             Request build() {
                 Request request;
                 request.setHeads(heads);
@@ -82,6 +91,7 @@ public:
                 request.setBody(body, bodyLength);
                 request.setParams(params);
                 request.setPath(path);
+                request.setContentType(conentType);
                 return request;
             }
         };

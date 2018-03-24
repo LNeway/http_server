@@ -52,4 +52,10 @@ std::string Request::getPath() {
     return this->path;
 }
 
+void Request::setContentType(std::string contentType) {
+    this->contentType = contentType;
+}
 
+std::string Request::getContentType() {
+    return this->contentType;
+}
