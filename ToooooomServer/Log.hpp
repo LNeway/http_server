@@ -10,6 +10,7 @@
 #define Log_hpp
 
 #include <stdio.h>
+
 #include "Const.hpp"
 
 class Log {

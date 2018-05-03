@@ -8,6 +8,7 @@
 
 #include "Const.hpp"
 #include <regex>
+#include "RequestBuild.hpp"
 
 #ifndef Utils_h
 #define Utils_h
@@ -74,7 +75,7 @@ static std::string trim(const std::string str)
 static Request buildRequest(std::vector<std::string> heads, char* body, unsigned int bodyLength) {
     std::vector<std::string>::iterator begin = heads.begin();
     std::vector<std::string>::iterator end = heads.end();
-    Request::Build build;
+    RequestBuild build;
     std::map<std::string, std::string> headsMap;
     bool isMethodLine = true;
     int emptyCount =  0;

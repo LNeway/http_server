@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
+#include <thread>
 #include "Request.hpp"
 #include "Response.hpp"
 #include "NetContext.hpp"
@@ -63,9 +64,12 @@ int readLine(int fd, char* src, unsigned int maxLength) {
 }
 
 void* handleSocket(void* netContext) {
+    pthread_detach(pthread_self());
+
     char buffer[BUFFER_LENGTH];
     NetContext* net = (NetContext*) netContext;
     std::string requestString;
+    
     if (net != NULL) {
         long currentLength;
         Request req;
@@ -139,11 +143,10 @@ int main(int argc, const char * argv[]) {
         // 向客户端发送数据
         pthread_t tid;
         NetContext* netContext = new NetContext(clientSocket);
-        handleSocket(netContext);
-//        int ret = pthread_create(&tid, NULL, handleSocket, (void*)netContext);
-//        if (ret != 0) {
-//            cout<<"create a thread failed...."<<endl;
-//        }
+        int ret = pthread_create(&tid, NULL, handleSocket, (void*)netContext);
+        if (ret != 0) {
+            cout<<"create a thread failed...."<<endl;
+        }
     }
    
     close(serv_sock);
