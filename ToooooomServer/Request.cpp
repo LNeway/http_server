@@ -16,9 +16,7 @@ Request::Request() {
 }
 
 Request::~Request() {
-    if (body != NULL) {
-        free(body);
-    }
+    
 }
 
 std::map<std::string,std::string> Request::getHeads() {

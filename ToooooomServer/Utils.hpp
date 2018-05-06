@@ -9,9 +9,16 @@
 #include "Const.hpp"
 #include <regex>
 #include "RequestBuild.hpp"
+#include "Parameter.hpp"
+#include <fstream>
+#include "TextParams.hpp"
+#include "BadRequest.hpp"
 
 #ifndef Utils_h
 #define Utils_h
+
+
+#define FILE_DIR "/Users/tomliu/Xcode/h264/csapp/ToooooomServer/ToooooomServer/"
 
 static std::map<std::string, Method> allMethod = {
     {"POST", POST},
@@ -135,20 +142,22 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
             std::vector<std::string> types = splitString(contentType, "; ");
             if (types.size() == 1) {
                 build.setConentType(types[0]);
-            }
-            
-            // parse the body boundary,get request data in the body.
-            if (types.size() == 2) {
+            } else if (types.size() == 2) {
+                build.setConentType(types[0]);
                 std::vector<std::string> boundary = splitString(types[1], "=");
                 if (boundary.size() == 2) { // find the body data boundary
-                    std::string boundaryStr = "--"+boundary[1];
+                    std::string boundaryStr = "--" + boundary[1];
                     if (bodyLength > boundaryStr.length()) {
                         std::string pattern = boundaryStr + "[\\s\\S]*?" + boundaryStr; //
                         std::regex re(pattern);
                     
                         std::string bodyStr(body);
+                
+                        Log::d("test", bodyStr);
                         std::smatch results;
                         std::vector<std::string> dataPart;
+                        
+                        // 使用正则表达式取出数据的每一个部分
                         while (std::regex_search(bodyStr, results, re)) {
                             std::string s;
                             for (std::string x : results) {
@@ -160,23 +169,79 @@ static Request buildRequest(std::vector<std::string> heads, char* body, unsigned
                             bodyStr = boundaryStr + results.suffix().str();
                         }
                         
+                        std::vector<TextParams> paramsInBody;
+                        
+                        //解析数据的每部分
                         for (std::string data : dataPart) {
                             std::vector<std::string> lines = splitString(data, "\r\n");
-                            if (lines.size() != 4) {
-                                continue;
+                            
+                            std::string paramName;
+                            bool isFile = false;
+                            std::string fileName;
+                            std::string value;
+                            bool dataBegin = false;
+                            
+                            std::vector<std::string>::size_type lineCount = lines.size();
+                            
+                            for (int i = 0; i < lineCount; ++i) {
+                               
+                                std::string line = lines[i];
+                            
+                                if (line.find("Content-Disposition") != std::string::npos) {
+                                    std::string kp = "name=[\\s\\S]*";
+                                    std::regex kr(kp);
+                                    std::smatch km;
+                                
+                                    if (std::regex_search(lines[1], km, kr)) {
+                                        std::string keyValue = *km.begin();
+                                        std::vector<std::string> kv = splitString(keyValue, "=");
+                                        if (kv.size() == 2) {
+                                            paramName = kv[0];
+                                        }
+                                    }
+                                    
+                                    if (line.find("filename") != std::string::npos) {
+                                        std::string fkp = "filename=[\\s\\S]*";
+                                        std::regex fkr(fkp);
+                                        std::smatch fkm;
+                                        
+                                        if (std::regex_search(line, fkm, fkr)) {
+                                            std::string keyValue = *fkm.begin();
+                                            std::vector<std::string> kv = splitString(keyValue, "=");
+                                            if (kv.size() == 2) {
+                                                isFile = true;
+                                                fileName = kv[1].substr(1, std::strlen(kv[1].c_str()) - 2);
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if (line.find("Content-Type") != std::string::npos ) {
+                                    dataBegin = true;
+                                    continue;
+                                }
+                                
+                                if (dataBegin || i >= 3) {
+                                    value += line;
+                                }
                             }
                             
-                            std::string kp = "name=[\\s\\S]*";
-                            std::regex kr(kp);
-                            std::smatch km;
-
-                            
-                            if (std::regex_search(lines[1], km, kr)) {
-                                std::string keyValue = *km.begin();
-                                std::vector<std::string> kv = splitString(keyValue, "=");
-                                if (kv.size() == 2) {
-                                    params.insert(std::pair<std::string, std::string>(kv[1], lines[3]));
+                            if (isFile) {
+                                TextParams textParam(paramName, fileName, 0);
+                                paramsInBody.push_back(textParam);
+                                
+                                std::string targetPath(FILE_DIR + fileName);
+                                std::ofstream postFile(targetPath, std::ofstream::out);
+                                if (postFile.is_open()) {
+                                    postFile<<value;
+                                    postFile.close();
+                                } else {
+                                    BadReqeustException ex("create file for post request failed");
+                                    //throw ex;
                                 }
+                            } else {
+                                TextParams textParam(paramName, value, 1);
+                                paramsInBody.push_back(textParam);
                             }
                         }
                     }
